@@ -2,7 +2,9 @@ const fs = require('fs');
 const path = require('path');
 const { Client, Collection, Events, GatewayIntentBits } = require('discord.js');
 const dotenv = require('dotenv');
-dotenv.config(); // Carrega as variáveis de ambiente do arquivo .env
+const http = require('http'); // Add the 'http' module
+
+dotenv.config();
 
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
@@ -47,5 +49,20 @@ client.on(Events.InteractionCreate, async interaction => {
   }
 });
 
-client.login(process.env.TOKEN); // Use a variável de ambiente para o token
-//teste
+client.login(process.env.TOKEN);
+
+// HTTP server to keep the program active
+const server = http.createServer((req, res) => {
+  res.writeHead(200, { 'Content-Type': 'text/plain' });
+  res.end('Hello, this is your Node.js server running on port 3000.\n');
+});
+
+server.listen(3000, '127.0.0.1', () => {
+  console.log('Server is running on http://127.0.0.1:3000/');
+});
+
+// Keep the process running with a loop
+setInterval(() => {
+  // This code runs in a loop, so you can add any additional logic or checks here
+  console.log('Loop is running...');
+}, 10000); // Adjust the interval as needed
